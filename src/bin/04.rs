@@ -4,8 +4,8 @@ pub fn part_one(input: &str) -> Option<u64> {
     let grid = Grid::new(input);
     let mut count = 0;
 
-    for x in 0..grid.width {
-        for y in 0..grid.height {
+    for y in 0..grid.height {
+        for x in 0..grid.width {
             if let Some(b'@') = grid.get(x, y) {
                 if grid.count_neighbours(x, y) < 4 {
                     count += 1;
@@ -24,8 +24,8 @@ pub fn part_two(input: &str) -> Option<u64> {
     loop {
         let mut removed_rolls = 0;
 
-        for x in 0..grid.width {
-            for y in 0..grid.height {
+        for y in 0..grid.height {
+            for x in 0..grid.width {
                 if let Some(b'@') = grid.get(x, y) {
                     if grid.count_neighbours(x, y) < 4 {
                         count += 1;
