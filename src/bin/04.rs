@@ -6,7 +6,7 @@ pub fn part_one(input: &str) -> Option<u64> {
 
     for x in 0..grid.width {
         for y in 0..grid.height {
-            if let Some('@') = grid.get(x, y) {
+            if let Some(b'@') = grid.get(x, y) {
                 if grid.count_neighbours(x, y) < 4 {
                     count += 1;
                 }
@@ -26,11 +26,11 @@ pub fn part_two(input: &str) -> Option<u64> {
 
         for x in 0..grid.width {
             for y in 0..grid.height {
-                if let Some('@') = grid.get(x, y) {
+                if let Some(b'@') = grid.get(x, y) {
                     if grid.count_neighbours(x, y) < 4 {
                         count += 1;
                         removed_rolls += 1;
-                        grid.set(x, y, '.');
+                        grid.set(x, y, b'.');
                     }
                 }
             }
@@ -48,7 +48,7 @@ pub fn part_two(input: &str) -> Option<u64> {
 struct Grid {
     height: usize,
     width: usize,
-    data: Vec<char>,
+    data: Vec<u8>,
 }
 
 impl Grid {
@@ -65,11 +65,11 @@ impl Grid {
         Self {
             height: lines.len(),
             width: lines[0].len(),
-            data: lines.iter().flat_map(|line| line.chars()).collect(),
+            data: lines.iter().flat_map(|line| line.bytes()).collect(),
         }
     }
 
-    fn get(&self, x: usize, y: usize) -> Option<char> {
+    fn get(&self, x: usize, y: usize) -> Option<u8> {
         if x >= self.width || y >= self.width {
             None
         } else {
@@ -77,7 +77,7 @@ impl Grid {
         }
     }
 
-    fn set(&mut self, x: usize, y: usize, value: char) {
+    fn set(&mut self, x: usize, y: usize, value: u8) {
         if x >= self.width || y >= self.height {
             return;
         }
@@ -94,7 +94,7 @@ impl Grid {
                     continue;
                 }
 
-                if let Some('@') = self.get(c, r) {
+                if let Some(b'@') = self.get(c, r) {
                     count += 1;
                 }
             }
