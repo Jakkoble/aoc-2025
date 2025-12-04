@@ -70,7 +70,7 @@ impl Grid {
     }
 
     fn get(&self, x: usize, y: usize) -> Option<u8> {
-        if x >= self.width || y >= self.width {
+        if x >= self.width || y >= self.height {
             None
         } else {
             Some(self.data[self.width * y + x])
