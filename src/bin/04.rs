@@ -6,10 +6,10 @@ pub fn part_one(input: &str) -> Option<u64> {
 
     for y in 0..grid.height {
         for x in 0..grid.width {
-            if let Some(b'@') = grid.get(x, y) {
-                if grid.count_neighbours(x, y) < 4 {
-                    count += 1;
-                }
+            if let Some(b'@') = grid.get(x, y)
+                && grid.count_neighbours(x, y) < 4
+            {
+                count += 1;
             }
         }
     }
@@ -26,12 +26,11 @@ pub fn part_two(input: &str) -> Option<u64> {
 
         for y in 0..grid.height {
             for x in 0..grid.width {
-                if let Some(b'@') = grid.get(x, y) {
-                    if grid.count_neighbours(x, y) < 4 {
-                        count += 1;
-                        removed_rolls += 1;
-                        grid.set(x, y, b'.');
-                    }
+                let Some(b'@') = grid.get(x, y) else { continue };
+                if grid.count_neighbours(x, y) < 4 {
+                    count += 1;
+                    removed_rolls += 1;
+                    grid.set(x, y, b'.');
                 }
             }
         }
