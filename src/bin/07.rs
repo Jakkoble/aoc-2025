@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 advent_of_code::solution!(7);
 
 fn add_beam_if_new(x: usize, y: usize, beams: &mut Vec<(usize, usize)>) {
@@ -41,27 +43,45 @@ pub fn part_one(input: &str) -> Option<u64> {
     Some(splits)
 }
 
-pub fn travel_timeline(start: (usize, usize), manifold: &Manifold, timelines: &mut u64) {
-    *timelines += 1;
+pub fn travel_timeline(
+    start: (usize, usize),
+    manifold: &Manifold,
+    timelines: &mut u64,
+    memo: &mut HashMap<(usize, usize), u64>,
+) {
+    if let Some(&count) = memo.get(&start) {
+        *timelines += count;
+        return;
+    }
+
+    let initial_count = *timelines;
+
     let mut x = start.0;
     for y in (start.1)..manifold.height {
         if let Some(next) = manifold.get(x, y + 1)
             && next == b'^'
         {
-            travel_timeline((x + 1, y + 1), manifold, timelines);
+            // go right
+            travel_timeline((x + 1, y + 1), manifold, timelines, memo);
+
+            // go left
             x -= 1;
         }
     }
 
-    // works, but stop using recursion due to performance and use iterative appraoch with a stack
-    // (always go left and add right to stack)
+    *timelines += 1;
+
+    let total_added = *timelines - initial_count;
+    memo.insert(start, total_added);
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
     let manifold = Manifold::new(input);
     let mut timelines: u64 = 0;
+    let mut memo: HashMap<(usize, usize), u64> = HashMap::new();
 
-    travel_timeline(manifold.start, &manifold, &mut timelines);
+    travel_timeline(manifold.start, &manifold, &mut timelines, &mut memo);
+
     Some(timelines)
 }
 
