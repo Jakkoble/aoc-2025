@@ -49,30 +49,25 @@ pub fn travel_timeline(
     timelines: &mut u64,
     memo: &mut HashMap<(usize, usize), u64>,
 ) {
-    if let Some(&count) = memo.get(&start) {
+    if let Some(count) = memo.get(&start) {
         *timelines += count;
         return;
     }
 
-    let initial_count = *timelines;
+    let initial_timelines = *timelines;
+    *timelines += 1;
 
     let mut x = start.0;
     for y in (start.1)..manifold.height {
         if let Some(next) = manifold.get(x, y + 1)
             && next == b'^'
         {
-            // go right
             travel_timeline((x + 1, y + 1), manifold, timelines, memo);
-
-            // go left
             x -= 1;
         }
     }
 
-    *timelines += 1;
-
-    let total_added = *timelines - initial_count;
-    memo.insert(start, total_added);
+    memo.insert(start, *timelines - initial_timelines);
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
